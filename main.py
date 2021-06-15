@@ -44,6 +44,14 @@ def alert_all(db):
         if db[uid]["isopen"]:
             push_mess(uid, "早安你好，昨天整天的 COVID19 確診者共有: {} 人。".format(checked_num))
 
+def external():
+    try:
+        db = json.load(open('DataBase/DataBase.json', encoding='utf-8'))
+    except:
+        db = json.loads("{}")
+    print(db)
+    alert_all(db)
+
 @app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
