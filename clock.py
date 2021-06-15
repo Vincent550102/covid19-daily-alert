@@ -5,14 +5,17 @@ from main import alert_all
 
 sched = BlockingScheduler()
 
-@sched.scheduled_job('interval', seconds=15)
-def timed_job():
+def dothing():
     try:
         db = json.load(open('DataBase/DataBase.json', encoding='utf-8'))
     except:
         db = json.loads("{}")
     print(db)
     alert_all(db)
+
+@sched.scheduled_job('interval', seconds=15)
+def timed_job():
+    dothing()
 
 # @sched.scheduled_job('cron', day_of_week='mon-sun', hour=2)
 # def scheduled_job():
