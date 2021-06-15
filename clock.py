@@ -1,9 +1,9 @@
-from apscheduler.schedulers.blocking import BackgroundScheduler
+from apscheduler.schedulers.Blocking import BlockingScheduler
 import json
 from main import external
 
 
-sched = BackgroundScheduler()
+sched = BlockingScheduler()
 
 
 @sched.scheduled_job('interval', seconds=15)
