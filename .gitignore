@@ -1,1 +1,4 @@
-"config.ini" 
+config.ini
+test.py
+DataBase/DataBase.json
+DataBase/__pycache__

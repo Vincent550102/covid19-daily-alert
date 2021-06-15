@@ -15,6 +15,8 @@ from linebot.models import (
 from random import randint
 from time import sleep
 import configparser,requests,json
+from DataBase.create_database import create_DB_Template
+from crawler import crawler
 app = Flask(__name__)
 
 # LINE 聊天機器人的基本資料
@@ -30,6 +32,17 @@ def push_mess(uid, mess):
         TextMessage(text=mess)
     )
 
+def reply_mess(event, mess):
+    line_bot_api.reply_message(
+        event.reply_token,
+        TextMessage(text=mess)
+    )
+
+def alert_all(db):
+    for uid in db:
+        if db[uid]["isopen"]:
+            push_mess(uid, "早安你好，昨天整天的 COVID19 確診者共有: {} 人".format(crawler()))
+
 @app.route("/callback", methods=['POST'])
 def callback():
     signature = request.headers['X-Line-Signature']
@@ -41,12 +54,24 @@ def callback():
         abort(400)
     return 'OK'
 
-# 學你說話
 @handler.add(MessageEvent, message=TextMessage)
 def echo(event):
-    print("test")
-    pass
+    mess = event.message.text
+    uid = event.source.user_id
+    try:
+        db = json.load(open('DataBase/DataBase.json', encoding='utf-8'))
+    except:
+        db = json.loads("{}")
+    if mess=="OK":
+        db[uid] = create_DB_Template(uid)
+        reply_mess(event, "這是昨天的確診數，之後每天 7:00 將會為您更新昨天的確診數歐~")
+    elif mess=="test":
+        alert_all(db)
+    else:
+        reply_mess(event, "不明命令 code:404")
 
+    with open('DataBase/DataBase.json','w',encoding='utf-8') as f:
+        json.dump(db,f,indent=2,sort_keys=True,ensure_ascii=False)
 
 if __name__ == "__main__":
     app.run()
