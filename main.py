@@ -14,6 +14,7 @@ from linebot.models import (
 )
 from random import randint
 from time import sleep
+import datetime
 import configparser,json
 from DataBase.create_database import create_DB_Template
 from crawler import crawler
@@ -69,6 +70,7 @@ def echo(event):
     elif mess=="test":
         alert_all(db)
     elif mess=="debug":
+        print(datetime.datetime.now().ctime())
         print(db)
     else:
         reply_mess(event, "不明命令 code:404")
