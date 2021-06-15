@@ -66,6 +66,8 @@ def echo(event):
         reply_mess(event, "這是昨天的確診數，之後每天 7:00 將會為您更新昨天的確診數歐~")
     elif mess=="test":
         alert_all(db)
+    elif mess=="debug":
+        print(db)
     else:
         reply_mess(event, "不明命令 code:404")
 
