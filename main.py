@@ -14,7 +14,7 @@ from linebot.models import (
 )
 from random import randint
 from time import sleep
-import configparser,requests,json
+import configparser,json
 from DataBase.create_database import create_DB_Template
 from crawler import crawler
 app = Flask(__name__)
@@ -22,7 +22,6 @@ app = Flask(__name__)
 # LINE 聊天機器人的基本資料
 config = configparser.ConfigParser()
 config.read('config.ini')
-
 line_bot_api = LineBotApi(config.get('line-bot', 'channel_access_token'))
 handler = WebhookHandler(config.get('line-bot', 'channel_secret'))
 
