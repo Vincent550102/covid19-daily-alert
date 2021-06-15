@@ -38,9 +38,10 @@ def reply_mess(event, mess):
     )
 
 def alert_all(db):
+    checked_num = crawler()
     for uid in db:
         if db[uid]["isopen"]:
-            push_mess(uid, "早安你好，昨天整天的 COVID19 確診者共有: {} 人 $0x100024$".format(crawler()))
+            push_mess(uid, "早安你好，昨天整天的 COVID19 確診者共有: {} 人。".format(checked_num))
 
 @app.route("/callback", methods=['POST'])
 def callback():
@@ -63,7 +64,7 @@ def echo(event):
         db = json.loads("{}")
     if mess=="OK":
         db[uid] = create_DB_Template(uid)
-        reply_mess(event, "這是昨天的確診數，之後每天 7:00 將會為您更新昨天的確診數歐~")
+        reply_mess(event, "這是昨天的確診數，之後每天早上 7:00 將會為您更新昨天的確診數歐~")
         alert_all(db)
     elif mess=="test":
         alert_all(db)
