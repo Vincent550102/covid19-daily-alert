@@ -1,27 +1,17 @@
 from __future__ import unicode_literals
-import os
 from flask import Flask, request, abort
 from linebot import LineBotApi, WebhookHandler
 from linebot.exceptions import InvalidSignatureError
 from linebot.models import (
     MessageEvent,
-    TextMessage,
-    TextSendMessage,
-    ImageSendMessage,
-    ButtonsTemplate,
-    MessageTemplateAction,
-    TemplateSendMessage
+    TextMessage
 )
-from random import randint
-from time import sleep
 import datetime
-import configparser,json
+import configparser
 from DataBase.DataBase import DATABASE
 from crawler import crawler
-import psycopg2
 app = Flask(__name__)
 
-# LINE 聊天機器人的基本資料
 config = configparser.ConfigParser()
 config.read('config.ini')
 line_bot_api = LineBotApi(config.get('line-bot', 'channel_access_token'))

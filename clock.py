@@ -1,5 +1,4 @@
 from apscheduler.schedulers.blocking import BlockingScheduler
-import json
 from main import external
 
 
