@@ -6,7 +6,7 @@ from main import external
 sched = BlockingScheduler()
 
 
-@sched.scheduled_job('interval', seconds=15)
+@sched.scheduled_job('interval', hour=7)
 def timed_job():
     external()
 
