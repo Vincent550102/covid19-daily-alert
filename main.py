@@ -76,6 +76,6 @@ def echo(event):
         print(db.Select())
     else:
         reply_mess(event, "不明命令 code:404")
-
+    db.Close()
 if __name__ == "__main__":
     app.run()

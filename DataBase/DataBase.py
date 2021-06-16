@@ -10,14 +10,12 @@ class DATABASE:
         val = ("{uid}", True)
         self.cursor.execute(SQL_order, val)
         self.conn.commit()
-        self.Close()
 
     def Select(self):
         SQL_order = 'SELECT * FROM user_data WHERE isopen = true'
         self.cursor.execute(SQL_order)
         self.conn.commit()
         data = self.cursor.fetchall()
-        self.Close()
         return data
 
     def Close(self):
