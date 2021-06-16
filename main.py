@@ -16,8 +16,9 @@ from random import randint
 from time import sleep
 import datetime
 import configparser,json
-from DataBase.create_database import create_DB_Template
+from DataBase.DataBase import DATABASE
 from crawler import crawler
+import psycopg2
 app = Flask(__name__)
 
 # LINE 聊天機器人的基本資料
@@ -40,16 +41,12 @@ def reply_mess(event, mess):
 
 def alert_all(db):
     checked_num = crawler()
-    for uid in db:
-        if db[uid]["isopen"]:
-            push_mess(uid, "早安你好，昨天整天的 COVID19 確診者共有: {} 人。".format(checked_num))
+    data = db.Select()
+    for uid in data:
+        push_mess(uid[0], "早安你好，昨天整天的 COVID19 確診者共有: {} 人。".format(checked_num))
 
 def external():
-    try:
-        db = json.load(open('DataBase/DataBase.json', encoding='utf-8'))
-    except:
-        db = json.loads("{}")
-    print(db)
+    db = DATABASE()
     alert_all(db)
 
 @app.route("/callback", methods=['POST'])
@@ -67,24 +64,18 @@ def callback():
 def echo(event):
     mess = event.message.text
     uid = event.source.user_id
-    try:
-        db = json.load(open('DataBase/DataBase.json', encoding='utf-8'))
-    except:
-        db = json.loads("{}")
+    db = DATABASE()
     if mess=="OK":
-        db[uid] = create_DB_Template(uid)
+        db.Insert(uid)
         reply_mess(event, "這是昨天的確診數，之後每天早上 7:00 將會為您更新昨天的確診數歐~")
         alert_all(db)
     elif mess=="test":
         alert_all(db)
     elif mess=="debug":
         print(datetime.datetime.now().ctime())
-        print(db)
+        print(db.Select())
     else:
         reply_mess(event, "不明命令 code:404")
-
-    with open('DataBase/DataBase.json','w',encoding='utf-8') as f:
-        json.dump(db,f,indent=2,sort_keys=True,ensure_ascii=False)
 
 if __name__ == "__main__":
     app.run()
