@@ -7,7 +7,7 @@ class DATABASE:
 
     def Insert(self, uid):
         SQL_order = f'INSERT INTO user_data (uid,isopen) VALUES (%s, %s);'
-        val = ("{uid}", True)
+        val = ("{}".format(uid), True)
         self.cursor.execute(SQL_order, val)
         self.conn.commit()
 
